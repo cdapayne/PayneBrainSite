@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="../Content/icon.css" rel="stylesheet" />
+    <link href="../Content/easyui.css" rel="stylesheet" />
+    <link href="../Content/demo.css" rel="stylesheet" />
+  <style>
+      table{
+border-collapse:collapse;
+border:1px solid #000000;
+}
+
+table td{
+border:1px solid #000000;
+}
+  </style>
+</head>
+<body>
+    <h2>Multiline TextBox</h2>
+    <p>This example shows how to define a textbox for the user to enter multi-line text input.</p>
+    <div style="margin:20px 0;"></div>
+    <p><strong>Adapted from <a href="http://stackoverflow.com/questions/2006468/copy-paste-from-excel-to-a-web-page">http://stackoverflow.com/questions/2006468/copy-paste-from-excel-to-a-web-page</a></strong></p>
+
+    <p>Paste excel data here:</p>
+    <textarea name="excel_data" style="width:250px;height:150px;"></textarea><br>
+    <input type="button" onclick="javascript:generateTable()" value="Genereate Table" />
+    <br><br>
+    <p>Table data will appear below</p>
+    <hr>
+    <div id="excel_table"></div>
+    <button onclick="InBox();">Show whats in the box</button>
+    <script>
+        var ListOfIps = "";
+        function generateTable() {
+            var data = $('textarea[name=excel_data]').val();
+            console.log(data);
+            var rows = data.split("\n");
+
+            var table = $('<table />');
+
+            for (var y in rows) {
+                var cells = rows[y].split("\t");
+                var row = $('<tr />');
+                for (var x in cells) {
+                    row.append('<td>' + cells[x] + '</td>');
+                    row.append('<td>' + 'bob' + '</td>');
+
+                    ListOfIps = cells[x] + ',' + ListOfIps;
+                    table.append(row);
+                }
+
+                // Insert into DOM
+                $('#excel_table').html(table);
+            }
+            GoToHome2(ListOfIps);
+        }
+            function GoToHome2(ListOfIpsx) {
+                var datax = "{IPs:\"" + ListOfIpsx + "\"}";
+                $.ajax({
+                    type: "POST",
+                    url: "../Service.asmx/IPTest",
+                    data: datax,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.hasOwnProperty('d')) {
+                            msg = msg.d;
+                        }
+                        var TableList=msg.split(',');
+                        var Table_IPMap=TableList[0];
+                        var Table_Arin=TableList[1];
+                        var Table_NetBlocks=TableList[2];
+                        alert(Table_IPMap);
+                        alert(Table_Arin);
+                        alert(Table_NetBlocks);
+
+                        LetCallTable(msg);
+                        var json = JSON.parse(Table_IPMap);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("x" + error);
+                        alert(status);
+                        alert(xhr);
+                    }
+                });
+            }
+            function LetCallTable(tableName) {
+                var datax = "{TableName:\"" + tableName + "\"}";
+                $.ajax({
+                    type: "POST",
+                    url: "../Service.asmx/GetTable",
+                    data: datax,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        alert("returning jsontable");
+                        if (msg.hasOwnProperty('d')) {
+                            msg = msg.d;
+                        }
+                        alert(msg);
+                        var json = JSON.parse(msg);
+                        for (var i = 0; i < json.length; i++) {
+                            alert(json[i]);
+                            alert(json[i].IP);
+                            alert(json[i].Latitude);
+                            alert(json[i].Longitude);
+                            //var tr = "<tr>";
+                            //var td1 = "<td>" + obj[i]["id"] + "</td>";
+                            //var td2 = "<td>" + obj[i]["name"] + "</td>";
+                            //var td3 = "<td>" + obj[i]["color"] + "</td></tr>";
+
+                            //$("#mytable").append(tr + td1 + td2 + td3);
+
+                        }
+                        var json = JSON.parse(msg);
+                    
+                    error: function (xhr, status, error) {
+                        alert("x" + error);
+                        alert(status);
+                        alert(xhr);
+                    }
+                });
+            }
+        function InBox() {
+            var text = document.getElementById('ipbox').value
+            var lines = document.getElementById('ipbox').value.split(' ');
+           
+            for (var i = 0; i < lines.length; i++) {
+                //code here using lines[i] which will give you each line
+            }
+        }
+    </script>
+</body>
+</html>

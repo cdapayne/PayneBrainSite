@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ArinWhois</name>
+    </assembly>
+    <members>
+        <member name="T:ArinWhois.Client.ArinClient">
+            <summary>
+            A class for ARIN operations
+            </summary>
+        </member>
+        <member name="F:ArinWhois.Client.ArinClient.BaseUrl">
+            <summary>
+            The base URL for ARIN whois.
+            </summary>
+        </member>
+        <member name="F:ArinWhois.Client.ArinClient.DeserializationOptions">
+            <summary>
+            Options for the JSON deserialization process.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Client.ArinClient.ResourceType">
+            <summary>
+            The types of resources that can be queried through ARIN.
+            </summary>
+        </member>
+        <member name="M:ArinWhois.Client.ArinClient.QueryIpAsync(System.Net.IPAddress)">
+            <summary>
+            Query an IP address, async
+            </summary>
+            <param name="ip">The IP address to query.</param>
+            <returns>Returns an async task with the response.</returns>
+        </member>
+        <member name="M:ArinWhois.Client.ArinClient.QueryResourceAsync(System.String,ArinWhois.Client.ArinClient.ResourceType)">
+            <summary>
+            Queries a resource record on a handle.
+            </summary>
+            <param name="handle">The handle to query.</param>
+            <param name="resourceType">The type of resource record to query.</param>
+            <returns>Returns an async task of the response.</returns>
+        </member>
+        <member name="M:ArinWhois.Client.ArinClient.GetRequestUrl(System.String)">
+            <summary>
+            Builds the string for the ARIN request.
+            </summary>
+            <param name="query">The query to perform.</param>
+            <returns>The formatted URL.</returns>
+        </member>
+        <member name="T:ArinWhois.Model.ValueWrapper`1">
+            <summary>
+            Wraps a value of a response from the ARIN Whois server.  The server uses a "$" value for most values.
+            </summary>
+            <typeparam name="T">The type of value to be wrapped.</typeparam>
+        </member>
+        <member name="T:ArinWhois.Model.Customer">
+            <summary>
+            The customer content of an ARIN Whois response.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.iso3166_1">
+            <summary>
+            The international location information used by an ARIN response.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.Network">
+            <summary>
+            The network content of a ARIN whois query.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.OrgRef">
+            <summary>
+            The organization reference of an ARIN Whois query.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.CustomerRef">
+            <summary>
+            The customer reference of an ARIN Whois query.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.NetBlock">
+            <summary>
+            The netblock content of an ARIN Whois query.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.Organization">
+            <summary>
+            The organization content of an ARIN Whois query.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.PointOfContact">
+            <summary>
+            A point of contact content of an ARIN Whois query.  Currently not implemented.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.StreetAddress">
+            <summary>
+            The street address used by an ARIN response.
+            </summary>
+        </member>
+        <member name="T:ArinWhois.Model.Response">
+            <summary>
+            A response from the ARIN Whois server.
+            </summary>
+        </member>
+    </members>
+</doc>

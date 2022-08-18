@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <audio id="audio" src="http://www.soundjay.com/button/beep-07.wav" autostart="false"></audio>
+    <a onclick="playSound();"> Play</a>
+    <script>
+    function playSound() {
+          var sound = document.getElementById("audio");
+          sound.play();
+      }
+    </script>
+</body>
+</html>

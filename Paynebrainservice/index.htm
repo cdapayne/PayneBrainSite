@@ -1,0 +1,141 @@
+﻿
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="Content/css/normalize.css" rel="stylesheet" />
+    <link href="Content/css/demo.css" rel="stylesheet" />
+    <link href="Content/css/component1.css" rel="stylesheet" />
+    <script src="Content/modernizr-2.6.2.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <style>
+ div.shadow {
+    max-width:40%;
+    max-height:40%;
+    top:10%;
+    left:50%;
+    overflow:visible;
+}
+img.logo {
+    position:relative;
+    max-width:100%;
+    max-height:100%;
+    margin-top:10%;
+    margin-left:-50%;
+}
+.animate
+{
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
+}
+
+.action-button
+{
+    left:27%;
+	position: relative;
+	padding: 10px 40px;
+    margin: 20px 10px 10px 0px;
+    float: left;
+	border-radius: 10px;
+	font-family: 'Pacifico', cursive;
+	font-size: 25px;
+	color: #FFF;
+	text-decoration: none;	
+}
+
+.blue
+{
+	background-color: #3498DB;
+	border-bottom: 5px solid #2980B9;
+	text-shadow: 0px -2px #2980B9;
+}
+
+.red
+{
+	background-color: #E74C3C;
+	border-bottom: 5px solid #BD3E31;
+	text-shadow: 0px -2px #BD3E31;
+}
+
+.green
+{
+	background-color: #82BF56;
+	border-bottom: 5px solid #669644;
+	text-shadow: 0px -2px #669644;
+}
+
+.yellow
+{
+	background-color: #F2CF66;
+	border-bottom: 5px solid #D1B358;
+	text-shadow: 0px -2px #D1B358;
+}
+.action-button:active
+{
+	transform: translate(0px,5px);
+  -webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
+}
+    </style>
+
+</head>
+<body style="background-color:white;">
+    <div id="brain">
+        <div class="shadow"><img class="logo" src="Content/Image/paynebrain.png" /></div>
+    </div>
+    <a href="#" class="action-button shadow animate blue" onclick="GoToIP();">IP Mapping</a>
+    <a href="#" class="action-button shadow animate red" onclick="TestArt();" >Map Mac</a>
+    <a href="#" class="action-button shadow animate green" onclick="GoGo();">Emojinary</a>
+    <a href="#" class="action-button shadow animate yellow" onclick="GoToResume();">Me?</a>
+
+    <script>
+        function TestArt() {
+            window.location = 'art/Tot/index.html';
+        }
+        function GoGo() {
+            swal("woah now?", "I'm not quite done yet");
+        }
+        function GoToIP() {
+            window.location ='IPMap/IPMap.html';
+        }
+        function GoToResume() {
+            window.location = 'Resume/index.html';
+        }
+        function GoToHome2() {
+            $.ajax({
+                type: "POST",
+                url: "Service.asmx/HelloWorld",
+                data:"{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    if (msg.hasOwnProperty('d')) {
+                        msg = msg.d;
+                    }
+                    alert(msg);
+                    var json = JSON.parse(msg);
+                    alert(json);
+                },
+                error: function (xhr, status, error) {
+                    alert("x" + error);
+                    alert(status);
+                    alert(xhr);
+                    //console.log(xhr);
+                    //console.log(status);
+                    //console.log(error);
+                }
+            });
+        }
+        function GoToApps() {
+            alert("hssh");
+            window.location.href = 'Apps.html';
+        }
+    </script>
+</body>
+</html>

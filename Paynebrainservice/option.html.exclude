@@ -1,0 +1,103 @@
+﻿
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    .mesh {
+        fill: none;
+        stroke: #000;
+        stroke-width: .25px;
+    }
+
+    .start {
+        fill: none;
+        stroke: brown;
+    }
+
+    .end {
+        fill: none;
+        stroke: steelblue;
+    }
+</style>
+<body>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://bl.ocks.org/mbostock/raw/3828981/d3.hexbin.min.js"></script>
+    <link href="Content/css/component2.css" rel="stylesheet" />
+    <script src="Content/modernizr-2.6.2.min.js"></script>
+
+        <div class="container">
+            <!-- Top Navigation -->
+
+            <div class="component">
+                <!-- Start Nav Structure -->
+                <button class="cn-button" id="cn-button">Menu</button>
+                <div class="cn-wrapper" id="cn-wrapper">
+                    <ul>
+                        <li><a href="#"><span>About</span></a></li>
+                        <li><a href="#"><span>Tutorials</span></a></li>
+                        <li><a href="#"><span>Articles</span></a></li>
+                        <li><a href="#"><span>Snippets</span></a></li>
+                        <li><a href="#"><span>Plugins</span></a></li>
+                        <li><a href="#"><span>Contact</span></a></li>
+                        <li><a href="#"><span>Follow</span></a></li>
+                        <li><a href="#"><span>Follow2</span></a></li>
+                        <li><a href="#"><span>Follow3</span></a></li>
+                        <li><a href="#"><span>Follow4</span></a></li>
+                        <li><a href="#"><span>Follow5</span></a></li>
+                    </ul>
+                </div>
+                <!-- End of Nav Structure -->
+            </div>
+
+        </div><!-- /container -->
+        <script src="Content/polyfills.js"></script>
+        <script src="Content/demo2.js"></script>
+    <script>
+
+var width = 1500,
+    height = 900,
+    radius =32;
+
+var p0 = [560, 300, 150],
+    p1 = [1120, 300, 150];
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .call(transition, p0, p1);
+
+svg.append("path")
+    .attr("class", "mesh")
+    .attr("d", d3.hexbin()
+      .size([width, height])
+      .radius(radius)
+      .mesh);
+
+svg.selectAll("circle")
+    .data([p0, p1])
+  .enter().append("circle")
+    .attr("class", function(d, i) { return i ? "end" : "start"; })
+    .attr("cx", function(d) { return d[0]; })
+    .attr("cy", function(d) { return d[1]; })
+    .attr("r", function(d) { return d[2] / 2 - .5; });
+
+function transition(svg, start, end) {
+  var center = [width / 2, height / 2],
+      i = d3.interpolateZoom(start, end);
+
+  svg
+      .attr("transform", transform(start))
+    .transition()
+      .delay(250)
+      .duration(i.duration * 2)
+      .attrTween("transform", function() { return function(t) { return transform(i(t)); }; })
+      .each("end", function() { d3.select(this).call(transition, end, start); });
+
+  function transform(p) {
+    var k = height / p[2];
+    return "translate(" + (center[0] - p[0] * k) + "," + (center[1] - p[1] * k) + ")scale(" + k + ")";
+  }
+}
+
+    </script>
+    </body>

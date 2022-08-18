@@ -1,0 +1,520 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Map</title>
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@1.5.4/src/loadingoverlay.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4-bWw5RuibkzN4t0Jo6UyjuO9AlbfSwE&callback=initMap"
+            async defer></script>
+       <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="Infowindow/css/style.css" rel="stylesheet" />
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+         /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+         #map {
+             height: 100%;
+             width:100%;
+             display:block;
+         }
+         /* Optional: Makes the sample page fill the window. */
+         html, body {
+             height: 100%;
+             margin: 0;
+             padding: 0;
+         }
+         ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+.dropdown{
+    background-color:#4CAF50;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+.active {
+    background-color:dodgerblue;
+}
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+ div.shadow {
+    max-width:40%;
+    max-height:40%;
+    top:10%;
+    left:50%;
+    overflow:visible;
+}
+img.logo {
+    position:relative;
+    max-width:100%;
+    max-height:100%;
+    margin-top:10%;
+    margin-left:-50%;
+}
+.animate
+{
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
+}
+
+.action-button
+{
+	padding: 10px 40px;
+    width:77%;
+    display:block;
+    float: left;
+	/*border-radius: 10px;*/
+	font-family: 'Pacifico', cursive;
+	font-size: 25px;
+	color: #FFF;
+    text-align:center;
+	text-decoration: none;	
+}
+
+.blue
+{
+	background-color: #3498DB;
+	border-bottom: 5px solid #2980B9;
+	text-shadow: 0px -2px #2980B9;
+}
+
+.red
+{
+	background-color: #E74C3C;
+	border-bottom: 5px solid #BD3E31;
+	text-shadow: 0px -2px #BD3E31;
+}
+
+.green
+{
+	background-color: #82BF56;
+	border-bottom: 5px solid #669644;
+	text-shadow: 0px -2px #669644;
+}
+
+.yellow
+{
+	background-color: #F2CF66;
+	border-bottom: 5px solid #D1B358;
+	text-shadow: 0px -2px #D1B358;
+}
+.action-button:active
+{
+	transform: translate(0px,5px);
+  -webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
+}
+::-webkit-input-placeholder {
+   font-size: 28px;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+      font-size: 28px;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+      font-size: 28px;
+}
+
+/* Overriding styles */
+
+::-webkit-input-placeholder {
+   font-size: 28px!important;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+      font-size: 28px!important;
+}
+::-moz-placeholder {  /* Firefox 19+ */
+      font-size: 28px!important;
+}
+
+    </style>
+</head>
+<body>
+    <!--<div id="topmap" style="width:100%; height:7%; background-color:blue;">
+        <ul>
+            <li style="background-color:orangered;"><a href="#home">Home</a></li>
+            <li style="float:right"><a class="active" href="#about">About</a></li>
+            <li><img src="ipmap.png" style="padding-left:80%; width:7%;" /></li>
+            <li class="dropdown" style="float:right;">
+                <a href="javascript:void(0)" class="dropbtn">Export</a>
+                <div class="dropdown-content">
+                    <a href="#">CSV</a>
+                    <a href="#">KML</a>
+                    <a href="#">Excel</a> 
+                </div>
+            </li>
+           
+        </ul>
+    </div>-->
+    <div id="map" style="float:right; width:80%; height:100%">
+    </div>
+    <div id="map_side" style="float:left; width:19%; height:87%; ">
+        <a href="#" class="action-button shadow animate red" style="height:5%;">IP Map</a>
+    <textarea name="excel_data" placeholder="Type or Paste your IP Addresses Here" style="height:86%; width:102%; resize:none; font-size:20px;">
+</textarea><br>
+    <!--<button style="width:105%; height:8%;" onclick="generateTable();">Map IP</button>-->
+        <a href="#" class="action-button shadow animate green" style="height:5%;" onclick="generateTable();">Map</a>
+        <a href="#" class="action-button shadow animate blue" style="height:5%;" onclick="LetsDownload(TableNamex);">Download</a>
+
+    </div>
+    <script>
+        var map;
+        var points = [];
+        var ListOfIps = "";
+        var myLatLng = { lat: 39.5, lng: -98.35 };
+        var IPArr = [];
+        var TableNamex = "blank";
+        
+
+        $(document).ready(function () {
+            $.LoadingOverlaySetup({
+                color: "rgba(30, 144, 255, .7)",
+                maxSize: "160px",
+                minSize: "140px",
+                resizeInterval: 0,
+                size: "100%"
+            });
+            initMap();
+        });
+
+        function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 4,
+            maxZoom: 13
+            
+        });
+
+        }
+    
+      
+        function generateTable() {
+            $.LoadingOverlay("show");
+          var data = $('textarea[name=excel_data]').val();
+          console.log(data);
+          var rows = data.split("\n");
+
+          var table = $('<table />');
+
+          for (var y in rows) {
+              var cells = rows[y].split("\t");
+              var row = $('<tr />');
+              for (var x in cells) {
+                  row.append('<td>' + cells[x] + '</td>');
+                  row.append('<td>' + 'bob' + '</td>');
+
+                  ListOfIps = cells[x] + ',' + ListOfIps;
+                  table.append(row);
+              }
+
+              // Insert into DOM
+             // $('#excel_table').html(table);
+          }
+          GoToHome2(ListOfIps);
+      }
+      function GoToHome2(ListOfIpsx) {
+          var datax = "{IPs:\"" + ListOfIpsx + "\"}";
+          $.ajax({
+              type: "POST",
+              url: "../Service.asmx/IPTest",
+              data: datax,
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              success: function (msg) {
+                  if (msg.hasOwnProperty('d')) {
+                      msg = msg.d;
+                  }
+                  var TableList = msg.split(',');
+                  var Table_IPMap = TableList[0];
+                  var Table_Arin = TableList[1];
+                  var Table_NetBlocks = TableList[2];
+                  var TableExcel = TableList[3];
+
+                  LetCallTable(Table_IPMap);
+                  TableNamex = TableExcel;
+
+                //  LetsDownload(TableExcel);
+              },
+              error: function (xhr, status, error) {
+                  swal("Hmmmmmmm?", "An error occured, please try again", "warning");
+              }
+          });
+      }
+      function LetsDownload(tableName) {
+       
+          if (tableName!="blank") {
+
+
+              var datax = "{FName:\"" + tableName + ".xlsx\"}";
+              window.location.href = '../ExcelHold/' + tableName + '.xlsx';
+          }
+      }
+      function LetCallTable(tableName) {
+          var datax = "{TableName:\"" + tableName + "\"}";
+          $.ajax({
+              type: "POST",
+              url: "../Service.asmx/GetTable",
+              data: datax,
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              success: function (msg) {
+                  if (msg.hasOwnProperty('d')) {
+                      msg = msg.d;
+                  }
+                  var json = JSON.parse(msg);
+                  for (var i = 0; i < json.length; i++) {
+                    
+                      AddToArray(json[i].Latitude, json[i].Longitude, json[i].LIPs);
+                      //var tr = "<tr>";
+                      //var td1 = "<td>" + obj[i]["id"] + "</td>";
+                      //var td2 = "<td>" + obj[i]["name"] + "</td>";
+                      //var td3 = "<td>" + obj[i]["color"] + "</td></tr>";
+
+                      //$("#mytable").append(tr + td1 + td2 + td3);
+
+                  }
+                  if (json.length != 0) {
+                      GoToMap();
+                  }
+                  else {
+                      swal("No results found", "", "warning");
+                  }
+                  $.LoadingOverlay("hide");
+              },
+              error: function (xhr, status, error) {
+                  swal("Hmmmmmmm?", "An error occured, please try again", "warning");
+              }
+          });
+      }
+      function AddToArray(Lat,Lon,IP) {
+          points.push(new google.maps.LatLng(Lat, Lon));
+          IPArr.push(IP);
+      }
+      function CreateMarker(Location, IP) {
+          var IPCount = IP.split(',');
+          var IPx=IP.replace(",", "<br>");
+          try {
+              var iconBase = 'newworld.png';
+
+              var marker = new google.maps.Marker({
+                  position: Location,
+                  icon: iconBase,
+                  title: "Location Here"
+              });
+
+              var easylistv = '';
+              IPCount.forEach(function (element) {
+                  console.log(element);
+                  easylistv = easylistv + '<div class="iw-subTitle">' + element + '</div>';
+              });
+              google.maps.event.addListener(marker, 'click', function () {
+                 
+
+                  var contentx = '<div id="iw-container">' +
+                  '<div class="iw-title">' + IPCount.length + ' IP Addresses</div>' +
+                    '<p>These IP Addresses mapped back to the nearest location of estimation, please take into account the accuracy bubble along with the possiblity of natted IPs and IP spoofers. For more IP information please download the full report below.</p>' +
+
+                  '<div class="iw-content">' + easylistv +
+
+                   
+                  '</div>' +
+                  '<div class="iw-bottom-gradient"></div>' +
+                '</div>';
+                  var infowindow = new google.maps.InfoWindow({
+                      content: contentx,//'<h2>' + IP + '</h2>'
+                      maxWidth: 350
+                  });
+
+                  google.maps.event.addListener(infowindow, 'domready', function () {
+
+                      // Reference to the DIV that wraps the bottom of infowindow
+                      var iwOuter = $('.gm-style-iw');
+
+                      /* Since this div is in a position prior to .gm-div style-iw.
+                       * We use jQuery and create a iwBackground variable,
+                       * and took advantage of the existing reference .gm-style-iw for the previous div with .prev().
+                      */
+                      var iwBackground = iwOuter.prev();
+
+                      // Removes background shadow DIV
+                      iwBackground.children(':nth-child(2)').css({ 'display': 'none' });
+
+                      // Removes white background DIV
+                      iwBackground.children(':nth-child(4)').css({ 'display': 'none' });
+
+                      // Moves the infowindow 115px to the right.
+                      iwOuter.parent().parent().css({ left: '115px' });
+
+                      // Moves the shadow of the arrow 76px to the left margin.
+                      iwBackground.children(':nth-child(1)').attr('style', function (i, s) { return s + 'left: 76px !important;' });
+
+                      // Moves the arrow 76px to the left margin.
+                      iwBackground.children(':nth-child(3)').attr('style', function (i, s) { return s + 'left: 76px !important;' });
+
+                      // Changes the desired tail shadow color.
+                      iwBackground.children(':nth-child(3)').find('div').children().css({ 'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index': '1' });
+
+                      // Reference to the div that groups the close button elements.
+                      var iwCloseBtn = iwOuter.next();
+
+                      // Apply the desired effect to the close button
+                      iwCloseBtn.css({ opacity: '1', right: '38px', top: '3px', border: '7px solid #48b5e9', 'border-radius': '13px', 'box-shadow': '0 0 5px #3990B9' });
+
+                      // If the content of infowindow not exceed the set maximum height, then the gradient is removed.
+                      if ($('.iw-content').height() < 140) {
+                          $('.iw-bottom-gradient').css({ display: 'none' });
+                      }
+
+                      // The API automatically applies 0.7 opacity to the button after the mouseout event. This function reverses this event to the desired value.
+                      iwCloseBtn.mouseout(function () {
+                          $(this).css({ opacity: '1' });
+                      });
+                  });
+
+                  // Event that closes the Info Window with a click on the map
+                  google.maps.event.addListener(map, 'click', function () {
+                      infowindow.close();
+                  });
+
+                  infowindow.open(map, marker);
+              });
+
+             
+              var cityCircle = new google.maps.Circle({
+                  strokeColor: '#409FE2',
+                  strokeOpacity: 0.8,
+                  strokeWeight: 2,
+                  fillColor: '#409FE2',
+                  fillOpacity: 0.35,
+                  map: map,
+                  center: Location,
+                  radius: 30000
+              });
+
+              map.panTo(Location);
+              return marker;
+          }
+          catch (e) {
+
+          }
+      }
+      
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+      function GoToMap() {
+          // Create an array of alphabetical characters used to label the markers.
+          var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+          var contentString = '<div id="content">' +
+     '<div id="siteNotice">' +
+     '</div>' +
+     '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+     '<div id="bodyContent">' +
+     '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+     'sandstone rock formation in the southern part of the ' +
+     'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
+     'south west of the nearest large town, Alice Springs; 450&#160;km ' +
+     '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
+     'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
+     'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
+     'Aboriginal people of the area. It has many springs, waterholes, ' +
+     'rock caves and ancient paintings. Uluru is listed as a World ' +
+     'Heritage Site.</p>' +
+     '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+     'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
+     '(last visited June 22, 2009).</p>' +
+     '</div>' +
+     '</div>';
+
+     
+
+
+          //// Add some markers to the map.
+          //// Note: The code uses the JavaScript Array.prototype.map() method to
+          //// create an array of markers based on a given "locations" array.
+          //// The map() method here has nothing to do with the Google Maps API.
+          //var markers = points.map(function(points, i) {
+          //    return new google.maps.Marker({
+          //        position: points,
+          //        label: labels[i % labels.length]
+          //    });
+          //});
+          var markersx = points.map(function (location, i) {
+              return CreateMarker(location,IPArr[i]);
+
+          });
+      
+          //var marker, i;
+
+          //for (i = 0; i < points.length; i++) {
+          //    alert(points[i]);
+          //    marker = new google.maps.Marker({
+                
+          //        position: points[i],
+          //        map: map
+          //    });
+          //}
+
+        //   Add a marker clusterer to manage the markers.
+          var markerCluster = new MarkerClusterer(map, markersx,
+              {
+                  imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                  maxZoom: 15
+              });
+
+          
+      
+
+      }
+    </script>
+
+</body>
+</html>
